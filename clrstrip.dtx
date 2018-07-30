@@ -1,0 +1,436 @@
+% \iffalse meta-comment
+%
+% File: clrstrip.dtx Copyright (C) 2018 Jonathan P. Spratte
+%
+% It may be distributed and/or modified under the conditions of the LaTeX
+% Project Public License (LPPL), either version 1.3c of this license or (at your
+% option) any later version.  The latest version of this license is in the file
+%
+%   https://www.latex-project.org/lppl.txt
+%
+% ------------------------------------------------------------------------------
+%
+%<*driver>
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+\input l3docstrip.tex
+\askforoverwritefalse
+\preamble
+
+--------------------------------------------------------------
+clrstrip -- place contents into a full width colour strip
+E-mail: jspratte@yahoo.de
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+--------------------------------------------------------------
+
+Copyright (C) 2018 Jonathan P. Spratte
+
+This  work may be  distributed and/or  modified under  the conditions  of the
+LaTeX Project Public License (LPPL),  either version 1.3c  of this license or
+(at your option) any later version.  The latest version of this license is in
+the file:
+
+  http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+  Jonathan P. Spratte.
+
+This work consists of the file  clrstrip.dtx
+and the derived files           clrstrip.pdf and
+                                clrstrip.sty.
+
+\endpreamble
+% stop docstrip adding \endinput
+\postamble
+\endpostamble
+\generate{\file{clrstrip.sty}{\from{clrstrip.dtx}{pkg}}}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</driver>
+%
+%<*driver>
+\ProvidesFile{clrstrip.dtx}
+  [2018/07/30 place contents into a full width colour strip]
+\documentclass{l3doc}
+\usepackage{xcolor}
+\usepackage{clrstrip}
+\usepackage{duckuments}
+^^A fix \duckuments@enquote in latest released version
+\makeatletter
+\ExplSyntaxOn
+\renewcommand*\duckuments@enquote[1]
+  {%
+    \cs_if_exist_use:NTF
+      \enquote { { #1 } }
+      { ``#1'' }
+  }
+\ExplSyntaxOff
+\makeatother
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+\usepackage{enumitem}
+\newenvironment{options}
+  {\begin{description}[style=nextline,font=\normalfont\ttfamily]}
+  {\end{description}}
+\begin{document}
+  \DocInput{clrstrip.dtx}
+\end{document}
+%</driver>
+%<*pkg>
+\ProvidesPackage{clrstrip}
+  [2018/07/30 place contents into a full width colour strip]
+\RequirePackage{keyval}
+%</pkg>
+% \fi
+%
+% \vspace*{-6cm}%
+% \begin{colorstrip}{blue!15}
+%   [%
+%     inner bot=1cm, outer bot=\bigskipamount, width=\paperwidth,
+%     inner top=6cm, left=-\dimexpr\marginparwidth+\marginparsep\relax
+%   ]
+%   \centering
+%   \LARGE The \pkg{clrstrip} package\\[\bigskipamount]
+%   \large
+%   Jonathan P. Spratte\footnotemark\\[\medskipamount]
+%   Released 2018/07/30
+% \end{colorstrip}
+% \footnotetext{E-mail: jspratte@yahoo.de}
+% \tableofcontents
+%
+% \begin{documentation}
+%
+% \section{Introduction}
+%
+% This is package provides the \env{colorstrip} environment, that places its
+% contents into a full page width colour strip. It requires the macro \cs{color}
+% to be defined and working, but doesn't load a package doing so on its own. So
+% for everything to work out properly, you'd have to load a package like
+% \pkg{color} or \pkg{xcolor} in your preamble, too.
+%
+% It is meant to be lightweight and fast. So while packages like \pkg{tcolorbox}
+% provide very pretty output, this package has a simplistic look achieved with
+% under 100~lines of code.
+%
+% It is written as a docstrip file: executing |latex clrstrip.dtx| generates the
+% \file{clrstrip.sty} file and typesets this documentation; execute
+% |tex clrstrip.dtx| to only generate \file{clrstrip.sty}.
+%
+% \section{Examples}
+%
+% The following is an example showing the results of
+% \begin{colorstrip}{gray!15}[inner=0pt]
+%\begin{verbatim}
+% \begin{colorstrip}{red!5}
+%   \blindduck
+% \end{colorstrip}
+%\end{verbatim}
+% \end{colorstrip}
+% \noindent
+% with \pkg{xcolor} and \pkg{duckuments} loaded:
+% \begin{colorstrip}{red!5}
+%   \blindduck
+% \end{colorstrip}
+% \noindent
+% The title of this documentation was typeset with
+% \begin{colorstrip}{gray!15}[inner=0pt]
+%\begin{verbatim}
+% \vspace*{-6cm}%
+% \begin{colorstrip}{blue!15}
+%   [%
+%     inner bot=1cm, outer bot=\bigskipamount, width=\paperwidth,
+%     inner top=6cm, left=-\dimexpr\marginparwidth+\marginparsep\relax
+%   ]
+%   \centering
+%   \LARGE The \pkg{clrstrip} package\\[\bigskipamount]
+%   \large
+%   Jonathan P. Spratte\footnotemark\\[\medskipamount]
+%   Released 2018/07/30
+% \end{colorstrip}
+% \footnotetext{E-mail: jspratte@yahoo.de}
+%\end{verbatim}
+% \end{colorstrip}
+%
+% \noindent
+% And the code boxes in this section (except this one) are surrounded by
+% \begin{colorstrip}{gray!15}[inner=2ex]
+%|\begin{colorstrip}{gray!15}[inner=0pt]|\\
+%|\begin{verbatim}                      |\\
+%|\end{verbatim}                        |\\
+%|\end{colorstrip}                      |
+% \end{colorstrip}
+%
+% \section{Documentation}
+%
+% \subsection{Macros and Environments}
+%
+% \begin{function}{\colorstripSet}
+%   \begin{syntax}
+%     \cs{colorstripSet}\marg{key=value}
+%   \end{syntax}
+%   This macro can be used to set the options listed in \autoref{sec:opt}
+%   outside of \env{colorstrip} (the package makes no global assignments).
+% \end{function}
+%
+% \begin{function}{colorstrip}
+%   \begin{syntax}
+%     |\begin{colorstrip}|\oarg{color model}\marg{color}\oarg{key=value}
+%   \end{syntax}
+%   This environment typesets its contents inside a \cs{vbox} which gets
+%   surrounded by a strip of the specified \meta{color} which reaches across the
+%   full page width. \meta{color model} and \meta{color} are the arguments
+%   passed to \cs{color}. In the second optional argument \meta{key=value} you
+%   can specify any of the options listed in \autoref{sec:opt}. After this
+%   environment starts a new paragraph with the document specific
+%   \cs{parindent}. As always you can suppress this indent with \cs{noindent}.
+%   The result is not page breakable.
+% \end{function}
+%
+% \subsection{Options}\label{sec:opt}
+%
+% The package doesn't support load time options. The following options can be
+% either set with \cs{colorstripSet} or inside of \env{colorstrip}.
+%
+% \begin{options}
+%   \item[inner=\meta{skip}]
+%     Sets both |inner top| and |inner bot| to \meta{skip}. Initially this is
+%     set to \cs{medskipamount}.
+%   \item[inner top=\meta{skip}]
+%     Specifies additional padding between the upper border of the strip and its
+%     contents.
+%   \item[inner bot=\meta{skip}]
+%     Specifies additional padding between the lower border of the strip and its
+%     contents.
+%   \item[outer=\meta{skip}]
+%     Sets both |outer top| and |outer bot| to \meta{skip}. Initially this is
+%     set to \cs{medskipamount}.
+%   \item[outer top=\meta{skip}]
+%     Specifies the vertical skip above the colour strip.
+%   \item[outer bot=\meta{skip}]
+%     Specifies the vertical skip below the colour strip.
+%   \item[width=\meta{width}]
+%     Sets the \cs{hsize} of the \cs{vbox} for the contents, resulting in the
+%     specified \meta{width}. If \meta{width} is |0pt| (which is the initial
+%     value) the width is the current \cs{linewidth}.
+%   \item[left=\meta{skip}]
+%     Specifies a horizontal skip from the left border of the text field for the
+%     contents. If \meta{skip} is |1sp| (which is the initial value) the
+%     \cs{vbox} is horizontally centred (not its contents).
+% \end{options}
+%
+% \subsection{Dependencies}
+%
+% \pkg{clrstrip} depends on the \pkg{keyval} package. In addition it needs a
+% package defining \cs{color} such as \pkg{color} or \pkg{xcolor} but doesn't
+% load one on its own.
+%
+% \end{documentation}
+%
+% \begin{implementation}
+%
+% \section{Implementation}
+%
+%    \begin{macrocode}
+%<*pkg>
+%    \end{macrocode}
+%
+% \subsection{Initializing Variables}
+%
+% \begin{variable}{\clrstrip@box}
+%   Stores the contents of \env{colorstrip}.
+%    \begin{macrocode}
+\newsavebox\clrstrip@box
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{\clrstrip@innerT}
+%   Stores the upper inner padding. Gets reused to store the overall height of
+%   the colour strip locally.
+%    \begin{macrocode}
+\newlength\clrstrip@innerT
+\clrstrip@innerT\medskipamount
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{\clrstrip@innerB}
+%   Stores the lower inner padding. Gets reused to store the overall depth of
+%   the colour strip locally.
+%    \begin{macrocode}
+\newlength\clrstrip@innerB
+\clrstrip@innerB\clrstrip@innerT
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{\clrstrip@outerT}
+%   Stores the upper outer padding.
+%    \begin{macrocode}
+\newlength\clrstrip@outerT
+\clrstrip@outerT\clrstrip@innerT
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{\clrstrip@outerB}
+%   Stores the lower outer padding.
+%    \begin{macrocode}
+\newlength\clrstrip@outerB
+\clrstrip@outerB\clrstrip@innerT
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{\clrstrip@width}
+%   Stores the lower inner padding. Gets reused to store the overall depth of
+%   the colour strip locally.
+%    \begin{macrocode}
+\newlength\clrstrip@width
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{\clrstrip@left}
+%   Stores the left skip from the left border of the text field. Might be reused
+%   to store the necessary left skip for centred alignment locally.
+%    \begin{macrocode}
+\newlength\clrstrip@left
+\clrstrip@left1sp
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{\clrstrip@oarg}
+%   Stores the first optional argument to \env{colorstrip} for later use.
+%    \begin{macrocode}
+\newcommand*\clrstrip@oarg{}
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{\clrstrip@marg}
+%   Stores the mandatory argument to \env{colorstrip} for later use.
+%    \begin{macrocode}
+\newcommand*\clrstrip@marg{}
+%    \end{macrocode}
+% \end{variable}
+%
+% \subsection{Internal Macros}
+%
+% \begin{macro}{\clrstrip@key}
+%   Shortcut to define new keys with \pkg{keyval}.
+%    \begin{macrocode}
+\newcommand*\clrstrip@key{\define@key{clrstrip}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\clrstrip@strip@a,\clrstrip@strip@b}
+%   Draws the colour strip using \cs{vrule}. \cs{clrstrip@strip@a} is used to
+%   expand the optional argument for \cs{clrstrip@strip@b} and should be called
+%   with the expanded mandatory argument as its argument. \cs{clrstrip@strip@b}
+%   then sets the colour and draws the \cs{vrule}.
+%    \begin{macrocode}
+\newcommand*\clrstrip@strip@a[1]
+  {%
+    \expandafter\clrstrip@strip@b\expandafter{\clrstrip@oarg}{#1}%
+  }
+\newcommand*\clrstrip@strip@b[2]
+  {%
+    \begingroup
+      \if\relax\detokenize{#1}\relax
+        \color{#2}%
+      \else
+        \color[#1]{#2}%
+      \fi
+      \advance\clrstrip@innerT\ht\clrstrip@box
+      \advance\clrstrip@innerB\dp\clrstrip@box
+      \rlap
+        {%
+          \hskip-\paperwidth
+          \vrule
+            width 2\paperwidth
+            height \clrstrip@innerT
+            depth \clrstrip@innerB
+        }%
+    \endgroup
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\clrstrip@start}
+%   Used to grab the second optional argument to \env{colorstrip}. Sets the
+%   specified keys and starts the grabbing of the contents inside the \cs{vbox}.
+%    \begin{macrocode}
+\newcommand\clrstrip@start[1][]
+  {%
+    \colorstripSet{#1}%
+    \ifdim\clrstrip@width=\z@
+      \clrstrip@width\linewidth
+    \fi
+    \setbox\clrstrip@box\vbox\bgroup
+      \hsize\clrstrip@width
+      \noindent\ignorespaces
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Initializing Keys}
+%
+%    \begin{macrocode}
+\clrstrip@key{inner}{\clrstrip@innerT#1\relax\clrstrip@innerB#1\relax}
+\clrstrip@key{outer}{\clrstrip@outerT#1\relax\clrstrip@outerB#1\relax}
+\clrstrip@key{inner top}{\clrstrip@innerT#1\relax}
+\clrstrip@key{inner bot}{\clrstrip@innerB#1\relax}
+\clrstrip@key{outer top}{\clrstrip@outerB#1\relax}
+\clrstrip@key{outer bot}{\clrstrip@outerB#1\relax}
+\clrstrip@key{width}{\clrstrip@width#1\relax}
+\clrstrip@key{left}{\clrstrip@left#1\relax}
+%    \end{macrocode}
+%
+% \subsection{User Level Macros}
+%
+% \begin{macro}{\colorstripSet}
+%   Shortcut for \pkg{keyval}'s \cs{setkeys}.
+%    \begin{macrocode}
+\newcommand*\colorstripSet{\setkeys{clrstrip}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{colorstrip}
+%    \begin{macrocode}
+\newenvironment{colorstrip}[2][]
+  {%
+%    \end{macrocode}
+% Save the arguments for the usage in |\end{colorstrip}|.
+%    \begin{macrocode}
+    \def\clrstrip@oarg{#1}%
+    \def\clrstrip@marg{#2}%
+%    \end{macrocode}
+% Start grabbing the contents
+%    \begin{macrocode}
+    \clrstrip@start
+  }
+  {%
+    \egroup
+    \par
+    \vskip\clrstrip@outerT
+    \noindent
+    \expandafter\clrstrip@strip@a\expandafter{\clrstrip@marg}%
+    \ifdim\clrstrip@left=1sp
+      \advance\clrstrip@width-\linewidth
+      \clrstrip@left-.5\clrstrip@width
+    \fi
+    \rlap{\hskip\clrstrip@left\usebox\clrstrip@box}%
+    \par
+    \vskip\clrstrip@outerB
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\endinput
+%    \end{macrocode}
+%
+% \end{implementation}
+%
+%    \begin{macrocode}
+%</pkg>
+%    \end{macrocode}
