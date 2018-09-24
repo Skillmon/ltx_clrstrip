@@ -10,7 +10,8 @@ TNM = $(TST:%.tex=%)
 PDF = $(TST:%.tex=%.pdf)
 
 
-
+quick:
+	$(LTX) $(DTX)
 all: $(DOC)
 sty: $(STY)
 test: $(PDF)
@@ -25,7 +26,7 @@ $(STY): $(DTX)
 $(PDF): $(TST) $(STY)
 	$(LTX) $(TST)
 
-.PHONY: clean clean_doc clean_sty clean_test clean_all all sty test
+.PHONY: clean clean_doc clean_sty clean_test clean_all all sty test quick
 clean: clean_test
 	-rm $(shell find $(NAM)\.* | grep -Ev '\.dtx$$' | grep -Ev '\.sty$$' | grep -Ev '\.pdf$$')
 clean_doc:
