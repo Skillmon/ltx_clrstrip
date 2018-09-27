@@ -56,7 +56,10 @@ and the derived files           clrstrip.pdf and
 %
 %<*driver>
 \ProvidesFile{clrstrip.dtx}
-  [2018/09/25 place contents into a full width colour strip]
+  [%
+    \csname clrstrip@date\endcsname\ 
+    place contents into a full width colour strip%
+  ]
 \documentclass{l3doc}
 \usepackage{xcolor}
 \usepackage{clrstrip}
@@ -82,8 +85,9 @@ and the derived files           clrstrip.pdf and
 \end{document}
 %</driver>
 %<*pkg>
+\newcommand*\clrstrip@date{2018/09/27}
 \ProvidesPackage{clrstrip}
-  [2018/07/30 place contents into a full width colour strip]
+  [\clrstrip@date place contents into a full width colour strip]
 \RequirePackage{keyval}
 %</pkg>
 % \fi
@@ -98,7 +102,7 @@ and the derived files           clrstrip.pdf and
 %   \LARGE The \pkg{clrstrip} package\\[\bigskipamount]
 %   \large
 %   Jonathan P. Spratte\footnotemark\\[\medskipamount]
-%   Released 2018/07/30
+%   Released \csname clrstrip@date\endcsname
 % \end{colorstrip}
 % \footnotetext{E-mail: jspratte@yahoo.de}
 % \tableofcontents
@@ -150,7 +154,7 @@ and the derived files           clrstrip.pdf and
 %   \LARGE The \pkg{clrstrip} package\\[\bigskipamount]
 %   \large
 %   Jonathan P. Spratte\footnotemark\\[\medskipamount]
-%   Released 2018/07/30
+%   Released \csname clrstrip@date\endcsname
 % \end{colorstrip}
 % \footnotetext{E-mail: jspratte@yahoo.de}
 %\end{verbatim}
