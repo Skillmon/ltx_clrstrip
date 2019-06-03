@@ -1,6 +1,6 @@
 % \iffalse meta-comment
 %
-% File: clrstrip.dtx Copyright (C) 2018 Jonathan P. Spratte
+% File: clrstrip.dtx Copyright (C) 2018-2019 Jonathan P. Spratte
 %
 % It may be distributed and/or modified under the conditions of the LaTeX
 % Project Public License (LPPL), either version 1.3c of this license or (at your
@@ -26,7 +26,7 @@ Released under the LaTeX Project Public License v1.3c or later
 See http://www.latex-project.org/lppl.txt
 --------------------------------------------------------------
 
-Copyright (C) 2018 Jonathan P. Spratte
+Copyright (C) 2018-2019 Jonathan P. Spratte
 
 This  work may be  distributed and/or  modified under  the conditions  of the
 LaTeX Project Public License (LPPL),  either version 1.3c  of this license or
@@ -85,7 +85,7 @@ and the derived files           clrstrip.pdf and
 \end{document}
 %</driver>
 %<*pkg>
-\newcommand*\clrstrip@date{2018-12-31}
+\newcommand*\clrstrip@date{2019-06-03}
 \ProvidesPackage{clrstrip}
   [\clrstrip@date\space place contents into a full width colour strip]
 \RequirePackage{keyval}
@@ -379,6 +379,7 @@ and the derived files           clrstrip.pdf and
     \fi
     \setbox\clrstrip@box\vbox\bgroup
       \hsize\clrstrip@width
+      \color@setgroup
       \clrstrip@preventIndent
   }
 %    \end{macrocode}
@@ -441,6 +442,7 @@ and the derived files           clrstrip.pdf and
     \clrstrip@start
   }
   {%
+    \color@endgroup
     \egroup
     \par
     \vskip\clrstrip@outerT

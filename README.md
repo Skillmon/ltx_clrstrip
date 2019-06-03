@@ -1,6 +1,6 @@
 clrstrip: place contents into a full width colour strip
 
-Copyright (C) 2018 by Jonathan P. Spratte
+Copyright (C) 2018-2019 by Jonathan P. Spratte
 
 This package may be distributed and/or modified under the conditions of the
 LaTeX Project Public License (LPPL), either version 1.3c of this license or (at
