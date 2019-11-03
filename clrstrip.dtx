@@ -64,6 +64,7 @@ and the derived files           clrstrip.pdf and
 \usepackage{xcolor}
 \usepackage{clrstrip}
 \usepackage{duckuments}
+\usepackage[oldstyle,notextcomp,nott]{kpfonts}
 ^^A fix \duckuments@enquote in latest released version
 \makeatletter
 \ExplSyntaxOn
@@ -85,7 +86,7 @@ and the derived files           clrstrip.pdf and
 \end{document}
 %</driver>
 %<*pkg>
-\newcommand*\clrstrip@date{2019-06-03}
+\newcommand*\clrstrip@date{2019-11-03}
 \ProvidesPackage{clrstrip}
   [\clrstrip@date\space place contents into a full width colour strip]
 \RequirePackage{keyval}
@@ -135,12 +136,11 @@ and the derived files           clrstrip.pdf and
 % \end{colorstrip}
 %\end{verbatim}
 % \end{colorstrip}
-% \noindent
 % with \pkg{xcolor} and \pkg{duckuments} loaded:
 % \begin{colorstrip}{red!5}
 %   \blindduck
 % \end{colorstrip}
-% \noindent
+%
 % The title of this documentation was typeset with
 % \begin{colorstrip}{gray!15}[inner bot=0pt, inner top=2ex]
 %\begin{verbatim}
@@ -159,9 +159,7 @@ and the derived files           clrstrip.pdf and
 % \footnotetext{E-mail: jspratte@yahoo.de}
 %\end{verbatim}
 % \end{colorstrip}
-%
-% \noindent
-% And the code boxes in this section (except this one) are surrounded by
+% and the code boxes in this section (except this one) are surrounded by
 % \begin{colorstrip}{gray!15}[inner=2ex]
 %   |\begin{colorstrip}{gray!15}[inner bot=0pt, inner top=2ex]|\\
 %   |\begin{verbatim}|\\
@@ -189,10 +187,11 @@ and the derived files           clrstrip.pdf and
 %   surrounded by a strip of the specified \meta{color} which reaches across the
 %   full page width. \meta{color model} and \meta{color} are the arguments
 %   passed to \cs{color}. In the second optional argument \meta{key=value} you
-%   can specify any of the options listed in \autoref{sec:opt}. After this
-%   environment starts a new paragraph with the document specific
-%   \cs{parindent}. As always you can suppress this indent with \cs{noindent}.
-%   The result is not page breakable.
+%   can specify any of the options listed in \autoref{sec:opt}. If you leave a
+%   blank line after this environment the next paragraph will be indented, else
+%   this indentation will be suppressed (this has been changed starting with
+%   version 2019-11-03, in earlier versions you'd have to use \cs{noindent} to
+%   suppress the paragraph indentation). The result is not page breakable.
 % \end{function}
 %
 % \subsection{Options}\label{sec:opt}
@@ -218,9 +217,10 @@ and the derived files           clrstrip.pdf and
 %   \item[outer bot=\meta{skip}]
 %     Specifies the vertical skip below the colour strip.
 %   \item[width=\meta{width}]
-%     Sets the \cs{hsize} of the \cs{vbox} for the contents, resulting in the
-%     specified \meta{width}. If \meta{width} is |0pt| (which is the initial
-%     value) the width is the current \cs{linewidth}.
+%     Sets the \cs{hsize} (and also \cs{linewidth} inside of the environment) of
+%     the \cs{vbox} for the contents, resulting in the specified \meta{width}.
+%     If \meta{width} is |0pt| (which is the initial value) the width is the
+%     current surrounding \cs{linewidth}.
 %   \item[left=\meta{skip}]
 %     Specifies a horizontal skip from the left border of the text field for the
 %     contents. If \meta{skip} is |1sp| (which is the initial value) the
@@ -313,17 +313,11 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{variable}
 %
-% \begin{variable}{\clrstrip@oarg}
-%   Stores the first optional argument to \env{colorstrip} for later use.
+% \begin{variable}{\clrstrip@arg}
+%   Stores the first optional and the mandatory argument to \env{colorstrip} for
+%   later use.
 %    \begin{macrocode}
-\newcommand*\clrstrip@oarg{}
-%    \end{macrocode}
-% \end{variable}
-%
-% \begin{variable}{\clrstrip@marg}
-%   Stores the mandatory argument to \env{colorstrip} for later use.
-%    \begin{macrocode}
-\newcommand*\clrstrip@marg{}
+\newcommand*\clrstrip@arg{}
 %    \end{macrocode}
 % \end{variable}
 %
@@ -333,37 +327,6 @@ and the derived files           clrstrip.pdf and
 %   Shortcut to define new keys with \pkg{keyval}.
 %    \begin{macrocode}
 \newcommand*\clrstrip@key{\define@key{clrstrip}}
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}{\clrstrip@strip}
-%   Draws the colour strip using \cs{vrule}. \cs{clrstrip@strip} should be
-%   called with the expanded \cs{clrstrip@marg} as its argument. It tests
-%   whether the first optional argument is empty, sets the colour accordingly
-%   and draws the \cs{vrule}. The arguments to \cs{color} need to be expanded as
-%   \pkg{color} doesn't work with the unexpanded ones depending on the chosen
-%   colour model.
-%    \begin{macrocode}
-\newcommand*\clrstrip@strip[1]
-  {%
-    \begingroup
-      \ifx\clrstrip@oarg\@empty
-        \color{#1}%
-      \else
-        \expandafter\color\expandafter[\clrstrip@oarg]{#1}%
-      \fi
-      \advance\clrstrip@innerT\ht\clrstrip@box
-      \advance\clrstrip@innerB\dp\clrstrip@box
-      \rlap
-        {%
-          \hskip-\paperwidth
-          \vrule
-            width 2\paperwidth
-            height \clrstrip@innerT
-            depth \clrstrip@innerB
-        }%
-    \endgroup
-  }
 %    \end{macrocode}
 % \end{macro}
 %
@@ -379,6 +342,7 @@ and the derived files           clrstrip.pdf and
     \fi
     \setbox\clrstrip@box\vbox\bgroup
       \hsize\clrstrip@width
+      \linewidth\hsize
       \color@setgroup
       \clrstrip@preventIndent
   }
@@ -432,29 +396,66 @@ and the derived files           clrstrip.pdf and
 \newenvironment{colorstrip}[2][]
   {%
 %    \end{macrocode}
-% Save the arguments for the usage in |\end{colorstrip}|.
+% Save the arguments for the usage in |\end{colorstrip}|. If the first argument
+% is empty \cs{color} won't get an optional argument, else store both the
+% optional and the mandatory one in \cs{clrstrip@arg}.
 %    \begin{macrocode}
-    \def\clrstrip@oarg{#1}%
-    \def\clrstrip@marg{#2}%
+    \def\clrstrip@arg{#1}%
+    \ifx\clrstrip@arg\@empty
+      \def\clrstrip@arg{{#2}}%
+    \else
+      \def\clrstrip@arg{[{#1}]{#2}}%
+    \fi
 %    \end{macrocode}
-% Start grabbing the contents
+% Start grabbing the contents.
 %    \begin{macrocode}
     \clrstrip@start
   }
   {%
+%    \end{macrocode}
+% End grabbing the contents.
+%    \begin{macrocode}
     \color@endgroup
     \egroup
+%    \end{macrocode}
+% Start a new paragraph (if none was started yet) and add the upper outer
+% padding.
+%    \begin{macrocode}
     \par
     \vskip\clrstrip@outerT
     \noindent
-    \expandafter\clrstrip@strip\expandafter{\clrstrip@marg}%
+%    \end{macrocode}
+% Draw the colour strip using a coloured \cs{vrule}.
+%    \begin{macrocode}
+    \begingroup
+      \expandafter\color\clrstrip@arg
+      \advance\clrstrip@innerT\ht\clrstrip@box
+      \advance\clrstrip@innerB\dp\clrstrip@box
+      \rlap
+        {%
+          \hskip-\paperwidth
+          \vrule
+            width 2\paperwidth
+            height \clrstrip@innerT
+            depth \clrstrip@innerB
+        }%
+    \endgroup
+%    \end{macrocode}
+% Output the contents of the colour strip.
+%    \begin{macrocode}
     \ifdim\clrstrip@left=1sp
       \advance\clrstrip@width-\linewidth
       \clrstrip@left-.5\clrstrip@width
     \fi
     \rlap{\hskip\clrstrip@left\copy\clrstrip@box}%
+%    \end{macrocode}
+% Start a new paragraph and add the lower outer padding. Also use \LaTeX's
+% \cs{@endpetrue} mechanism to let the user control whether the text after this
+% environment will be indented or not.
+%    \begin{macrocode}
     \par
     \vskip\clrstrip@outerB
+    \@endpetrue
   }
 %    \end{macrocode}
 % \end{macro}
