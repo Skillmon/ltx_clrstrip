@@ -1,6 +1,6 @@
 % \iffalse meta-comment
 %
-% File: clrstrip.dtx Copyright (C) 2018-2019 Jonathan P. Spratte
+% File: clrstrip.dtx Copyright (C) 2018-2020 Jonathan P. Spratte
 %
 % It may be distributed and/or modified under the conditions of the LaTeX
 % Project Public License (LPPL), either version 1.3c of this license or (at your
@@ -26,7 +26,7 @@ Released under the LaTeX Project Public License v1.3c or later
 See http://www.latex-project.org/lppl.txt
 --------------------------------------------------------------
 
-Copyright (C) 2018-2019 Jonathan P. Spratte
+Copyright (C) 2018-2020 Jonathan P. Spratte
 
 This  work may be  distributed and/or  modified under  the conditions  of the
 LaTeX Project Public License (LPPL),  either version 1.3c  of this license or
@@ -65,6 +65,8 @@ and the derived files           clrstrip.pdf and
 \usepackage{clrstrip}
 \usepackage{duckuments}
 \usepackage[oldstyle,notextcomp,nott]{kpfonts}
+\input{glyphtounicode}
+\pdfgentounicode=1
 ^^A fix \duckuments@enquote in latest released version
 \makeatletter
 \ExplSyntaxOn
@@ -86,10 +88,10 @@ and the derived files           clrstrip.pdf and
 \end{document}
 %</driver>
 %<*pkg>
-\newcommand*\clrstrip@date{2019-11-03}
+\newcommand*\clrstrip@date{2020-01-23}
 \ProvidesPackage{clrstrip}
   [\clrstrip@date\space place contents into a full width colour strip]
-\RequirePackage{keyval}
+\RequirePackage{expkv}
 %</pkg>
 % \fi
 %
@@ -129,7 +131,7 @@ and the derived files           clrstrip.pdf and
 % \section{Examples}
 %
 % The following is an example showing the results of
-% \begin{colorstrip}{gray!15}[inner bot=0pt, inner top=2ex]
+% \begin{colorstrip}{gray!15}[inner bot=0pt, inner top=2ex, outer bot=2pt]
 %\begin{verbatim}
 % \begin{colorstrip}{red!5}
 %   \blindduck
@@ -142,7 +144,7 @@ and the derived files           clrstrip.pdf and
 % \end{colorstrip}
 %
 % The title of this documentation was typeset with
-% \begin{colorstrip}{gray!15}[inner bot=0pt, inner top=2ex]
+% \begin{colorstrip}{gray!15}[inner bot=0pt, inner top=2ex, outer bot=2pt]
 %\begin{verbatim}
 % \vspace*{-6cm}%
 % \begin{colorstrip}{blue!15}
@@ -161,7 +163,7 @@ and the derived files           clrstrip.pdf and
 % \end{colorstrip}
 % and the code boxes in this section (except this one) are surrounded by
 % \begin{colorstrip}{gray!15}[inner=2ex]
-%   |\begin{colorstrip}{gray!15}[inner bot=0pt, inner top=2ex]|\\
+%   |\begin{colorstrip}{gray!15}[inner bot=0pt, inner top=2ex, outer bot=2pt]|\\
 %   |\begin{verbatim}|\\
 %   |\end{verbatim}  |\\
 %   |\end{colorstrip}|
@@ -226,22 +228,31 @@ and the derived files           clrstrip.pdf and
 %     contents. If \meta{skip} is |1sp| (which is the initial value) the
 %     \cs{vbox} is horizontally centred (not its contents).
 %   \item[afterheading]
-%     Ignores every value given to it. If used the indentation of the first line
-%     in a \env{colorstrip} will be prevented using the \LaTeX\ macros
+%     Doesn't accept any value. If used the indentation of the first line in a
+%     \env{colorstrip} will be prevented using the \LaTeX\ macros
 %     \cs{@afterindentfalse} and \cs{@afterheading}. This is the package default
-%     since version 2018-09-25.
+%     since version 2018-09-25. There was another change to this key in version
+%     2020-01-23, since which the key will throw an error if you provide a
+%     value.
 %   \item[noindent]
-%     Ignores every value given to it. If used the indentation of the first line
-%     in a \env{colorstrip} will be prevented using the \TeX\ primitives
+%     Doesn't accept any value. If used the indentation of the first line in a
+%     \env{colorstrip} will be prevented using the \TeX\ primitives
 %     \cs{noindent} and \cs{ignorespaces}. This was the package default before
-%     version 2018-09-25.
+%     version 2018-09-25. There was another change to this key in version
+%     2020-01-23, since which the key will throw an error if you provide a
+%     value.
 % \end{options}
 %
 % \subsection{Dependencies}
 %
-% \pkg{clrstrip} depends on the \pkg{keyval} package. In addition it needs a
-% package defining \cs{color} such as \pkg{color} or \pkg{xcolor} but doesn't
-% load one on its own.
+% \pkg{clrstrip} depends on the \pkg{expkv} package. This has changed since
+% version 2020-01-23, before that version \pkg{clrstrip} had been using
+% \pkg{keyval}. Though \pkg{keyval} is faster than \pkg{expkv}, \pkg{expkv} is
+% \emph{a lot} faster than \pkg{xkevyal} which replaces \pkg{keyval} and its
+% performance as soon as any other package is loaded.
+%
+% In addition \pkg{clrstrip} needs a package defining \cs{color} such as
+% \pkg{color} or \pkg{xcolor} but doesn't load one on its own.
 %
 % \end{documentation}
 %
@@ -323,10 +334,11 @@ and the derived files           clrstrip.pdf and
 %
 % \subsection{Internal Macros}
 %
-% \begin{macro}{\clrstrip@key}
-%   Shortcut to define new keys with \pkg{keyval}.
+% \begin{macro}{\clrstrip@key,\clrstrip@keyNV}
+%   Shortcut to define new keys with \pkg{expkv}.
 %    \begin{macrocode}
-\newcommand*\clrstrip@key{\define@key{clrstrip}}
+\newcommand*\clrstrip@key{\protected\ekvdef{clrstrip}}
+\newcommand*\clrstrip@keyNV{\protected\ekvdefNoVal{clrstrip}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -378,16 +390,16 @@ and the derived files           clrstrip.pdf and
 \clrstrip@key{outer bot}{\clrstrip@outerB#1\relax}
 \clrstrip@key{width}{\clrstrip@width#1\relax}
 \clrstrip@key{left}{\clrstrip@left#1\relax}
-\clrstrip@key{afterheading}[]{\let\clrstrip@preventIndent\clrstrip@afterheading}
-\clrstrip@key{noindent}[]{\let\clrstrip@preventIndent\clrstrip@noindent}
+\clrstrip@keyNV{afterheading}{\let\clrstrip@preventIndent\clrstrip@afterheading}
+\clrstrip@keyNV{noindent}{\let\clrstrip@preventIndent\clrstrip@noindent}
 %    \end{macrocode}
 %
 % \subsection{User Level Macros}
 %
 % \begin{macro}{\colorstripSet}
-%   Shortcut for \pkg{keyval}'s \cs{setkeys}.
+%   Shortcut for \pkg{expkv}'s \cs{ekvset}.
 %    \begin{macrocode}
-\newcommand*\colorstripSet{\setkeys{clrstrip}}
+\protected\def\colorstripSet{\ekvset{clrstrip}}
 %    \end{macrocode}
 % \end{macro}
 %
