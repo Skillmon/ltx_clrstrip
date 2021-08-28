@@ -88,7 +88,7 @@ and the derived files           clrstrip.pdf and
 \end{document}
 %</driver>
 %<*pkg>
-\newcommand*\clrstrip@date{2020-01-23}
+\newcommand*\clrstrip@date{2021-08-28}
 \ProvidesPackage{clrstrip}
   [\clrstrip@date\space place contents into a full width colour strip]
 \RequirePackage{expkv}
@@ -278,7 +278,7 @@ and the derived files           clrstrip.pdf and
 %   the colour strip locally.
 %    \begin{macrocode}
 \newlength\clrstrip@innerT
-\clrstrip@innerT\medskipamount
+\clrstrip@innerT=\medskipamount
 %    \end{macrocode}
 % \end{variable}
 %
@@ -287,7 +287,7 @@ and the derived files           clrstrip.pdf and
 %   the colour strip locally.
 %    \begin{macrocode}
 \newlength\clrstrip@innerB
-\clrstrip@innerB\clrstrip@innerT
+\clrstrip@innerB=\clrstrip@innerT
 %    \end{macrocode}
 % \end{variable}
 %
@@ -295,7 +295,7 @@ and the derived files           clrstrip.pdf and
 %   Stores the upper outer padding.
 %    \begin{macrocode}
 \newlength\clrstrip@outerT
-\clrstrip@outerT\clrstrip@innerT
+\clrstrip@outerT=\clrstrip@innerT
 %    \end{macrocode}
 % \end{variable}
 %
@@ -303,7 +303,7 @@ and the derived files           clrstrip.pdf and
 %   Stores the lower outer padding.
 %    \begin{macrocode}
 \newlength\clrstrip@outerB
-\clrstrip@outerB\clrstrip@innerT
+\clrstrip@outerB=\clrstrip@innerT
 %    \end{macrocode}
 % \end{variable}
 %
@@ -320,7 +320,7 @@ and the derived files           clrstrip.pdf and
 %   to store the necessary left skip for centred alignment locally.
 %    \begin{macrocode}
 \newlength\clrstrip@left
-\clrstrip@left1sp
+\clrstrip@left=1sp
 %    \end{macrocode}
 % \end{variable}
 %
@@ -350,11 +350,11 @@ and the derived files           clrstrip.pdf and
   {%
     \colorstripSet{#1}%
     \ifdim\clrstrip@width=\z@
-      \clrstrip@width\linewidth
+      \clrstrip@width=\linewidth
     \fi
     \setbox\clrstrip@box\vbox\bgroup
-      \hsize\clrstrip@width
-      \linewidth\hsize
+      \hsize=\clrstrip@width
+      \linewidth=\hsize
       \color@setgroup
       \clrstrip@preventIndent
   }
@@ -382,14 +382,14 @@ and the derived files           clrstrip.pdf and
 % \subsection{Initializing Keys}
 %
 %    \begin{macrocode}
-\clrstrip@key{inner}{\clrstrip@innerT#1\relax\clrstrip@innerB#1\relax}
-\clrstrip@key{outer}{\clrstrip@outerT#1\relax\clrstrip@outerB#1\relax}
-\clrstrip@key{inner top}{\clrstrip@innerT#1\relax}
-\clrstrip@key{inner bot}{\clrstrip@innerB#1\relax}
-\clrstrip@key{outer top}{\clrstrip@outerB#1\relax}
-\clrstrip@key{outer bot}{\clrstrip@outerB#1\relax}
-\clrstrip@key{width}{\clrstrip@width#1\relax}
-\clrstrip@key{left}{\clrstrip@left#1\relax}
+\clrstrip@key{inner}{\clrstrip@innerT=#1\relax\clrstrip@innerB=\clrstrip@innerT}
+\clrstrip@key{outer}{\clrstrip@outerT=#1\relax\clrstrip@outerB=\clrstrip@outerT}
+\clrstrip@key{inner top}{\clrstrip@innerT=#1\relax}
+\clrstrip@key{inner bot}{\clrstrip@innerB=#1\relax}
+\clrstrip@key{outer top}{\clrstrip@outerB=#1\relax}
+\clrstrip@key{outer bot}{\clrstrip@outerB=#1\relax}
+\clrstrip@key{width}{\clrstrip@width=#1\relax}
+\clrstrip@key{left}{\clrstrip@left=#1\relax}
 \clrstrip@keyNV{afterheading}{\let\clrstrip@preventIndent\clrstrip@afterheading}
 \clrstrip@keyNV{noindent}{\let\clrstrip@preventIndent\clrstrip@noindent}
 %    \end{macrocode}
@@ -447,9 +447,9 @@ and the derived files           clrstrip.pdf and
         {%
           \hskip-\paperwidth
           \vrule
-            width 2\paperwidth
+            width  2\paperwidth
             height \clrstrip@innerT
-            depth \clrstrip@innerB
+            depth  \clrstrip@innerB
         }%
     \endgroup
 %    \end{macrocode}
@@ -457,7 +457,7 @@ and the derived files           clrstrip.pdf and
 %    \begin{macrocode}
     \ifdim\clrstrip@left=1sp
       \advance\clrstrip@width-\linewidth
-      \clrstrip@left-.5\clrstrip@width
+      \clrstrip@left=-.5\clrstrip@width
     \fi
     \rlap{\hskip\clrstrip@left\copy\clrstrip@box}%
 %    \end{macrocode}
