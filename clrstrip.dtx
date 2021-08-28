@@ -266,14 +266,14 @@ and the derived files           clrstrip.pdf and
 %
 % \subsection{Initializing Variables}
 %
-% \begin{variable}{\clrstrip@box}
+% \begin{variable}[internal]{\clrstrip@box}
 %   Stores the contents of \env{colorstrip}.
 %    \begin{macrocode}
 \newsavebox\clrstrip@box
 %    \end{macrocode}
 % \end{variable}
 %
-% \begin{variable}{\clrstrip@innerT}
+% \begin{variable}[internal]{\clrstrip@innerT}
 %   Stores the upper inner padding. Gets reused to store the overall height of
 %   the colour strip locally.
 %    \begin{macrocode}
@@ -282,7 +282,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{variable}
 %
-% \begin{variable}{\clrstrip@innerB}
+% \begin{variable}[internal]{\clrstrip@innerB}
 %   Stores the lower inner padding. Gets reused to store the overall depth of
 %   the colour strip locally.
 %    \begin{macrocode}
@@ -291,7 +291,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{variable}
 %
-% \begin{variable}{\clrstrip@outerT}
+% \begin{variable}[internal]{\clrstrip@outerT}
 %   Stores the upper outer padding.
 %    \begin{macrocode}
 \newlength\clrstrip@outerT
@@ -299,7 +299,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{variable}
 %
-% \begin{variable}{\clrstrip@outerB}
+% \begin{variable}[internal]{\clrstrip@outerB}
 %   Stores the lower outer padding.
 %    \begin{macrocode}
 \newlength\clrstrip@outerB
@@ -307,7 +307,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{variable}
 %
-% \begin{variable}{\clrstrip@width}
+% \begin{variable}[internal]{\clrstrip@width}
 %   Stores the width the text block inside of the colour strip should be wide.
 %   Might be reused to calculate the skip to centre the text block locally.
 %    \begin{macrocode}
@@ -315,7 +315,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{variable}
 %
-% \begin{variable}{\clrstrip@left}
+% \begin{variable}[internal]{\clrstrip@left}
 %   Stores the left skip from the left border of the text field. Might be reused
 %   to store the necessary left skip for centred alignment locally.
 %    \begin{macrocode}
@@ -324,7 +324,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{variable}
 %
-% \begin{variable}{\clrstrip@arg}
+% \begin{variable}[internal]{\clrstrip@arg}
 %   Stores the first optional and the mandatory argument to \env{colorstrip} for
 %   later use.
 %    \begin{macrocode}
@@ -334,7 +334,7 @@ and the derived files           clrstrip.pdf and
 %
 % \subsection{Internal Macros}
 %
-% \begin{macro}{\clrstrip@key,\clrstrip@keyNV}
+% \begin{macro}[internal]{\clrstrip@key,\clrstrip@keyNV}
 %   Shortcut to define new keys with \pkg{expkv}.
 %    \begin{macrocode}
 \newcommand*\clrstrip@key{\protected\ekvdef{clrstrip}}
@@ -342,7 +342,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\clrstrip@start}
+% \begin{macro}[internal]{\clrstrip@start}
 %   Used to grab the second optional argument to \env{colorstrip}. Sets the
 %   specified keys and starts the grabbing of the contents inside the \cs{vbox}.
 %    \begin{macrocode}
@@ -361,7 +361,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\clrstrip@afterheading,\clrstrip@noindent}
+% \begin{macro}[internal]{\clrstrip@afterheading,\clrstrip@noindent}
 %   These two macros are the two options to suppress the indentation in a
 %   \env{colorstrip}.
 %    \begin{macrocode}
@@ -370,7 +370,7 @@ and the derived files           clrstrip.pdf and
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\clrstrip@preventIndent}
+% \begin{macro}[internal]{\clrstrip@preventIndent}
 %   Used to prevent the indentation of the first line in a \env{colorstrip}. It
 %   will be let to one of \cs{clrstrip@afterheading} or \cs{clrstrip@noindent}.
 %    \begin{macrocode}
